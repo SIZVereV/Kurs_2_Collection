@@ -1,0 +1,978 @@
+{
+	"info": {
+		"_postman_id": "ef2ecdd9-a03c-4f10-8a58-c7b4c47254ce",
+		"name": "Kurs_2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21259959"
+	},
+	"item": [
+		{
+			"name": "Open_Shedule",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm?.request?.body?.options?.raw?.language === 'json') {\r",
+							"    const rawData = pm.request.body.toString();\r",
+							"    const strippedData = rawData.replace(\r",
+							"        /\\\\\"|\"(?:\\\\\"|[^\"])*\"|(\\/\\/.*|\\/\\*[\\s\\S]*?\\*\\/)/g,\r",
+							"        (m, g) => g ? \"\" : m\r",
+							"    );\r",
+							"\r",
+							"    pm.request.body.update(JSON.stringify(JSON.parse(strippedData)));\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token_global={{siToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"from\": \"2022-07-01T08:00:00+05:00\",\r\n    \"till\": \"2022-07-01T09:30:00+05:00\",\r\n    \"onlyTypes\": [\r\n        \"event.class\",\r\n        \"slot\"\r\n    ]\r\n}\r\n//Открываем расписание",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}events",
+					"host": [
+						"{{baseUrl}}events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Personal Event in the Past",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var key = \"evId\"\r",
+							"var value = pm.response.json().data.payload.id //Вместо id можно использовать другое поле  json\r",
+							"pm.collectionVariables.set(key, value)\r",
+							"\r",
+							"var key = \"startAtId\"\r",
+							"var value = pm.response.json().data.startAt\r",
+							"pm.collectionVariables.set(key, value)"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm?.request?.body?.options?.raw?.language === 'json') {\r",
+							"    const rawData = pm.request.body.toString();\r",
+							"    const strippedData = rawData.replace(\r",
+							"        /\\\\\"|\"(?:\\\\\"|[^\"])*\"|(\\/\\/.*|\\/\\*[\\s\\S]*?\\*\\/)/g,\r",
+							"        (m, g) => g ? \"\" : m\r",
+							"    );\r",
+							"\r",
+							"    pm.request.body.update(JSON.stringify(JSON.parse(strippedData)));\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token_global={{siToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"startAt\": \"2022-06-08T02:00:00+03:00\",\r\n    \"endAt\": \"2022-06-08T02:30:00+03:00\",\r\n    \"backgroundColor\": \"{{yello}}\",\r\n    \"color\": \"{{blue}}\",\r\n    \"description\": \"Курсовая-2\",\r\n    \"title\": \"Сергей_ИВ\"\r\n}\r\n//Создаём событие в прошлом",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}createPersonal",
+					"host": [
+						"{{baseUrl}}createPersonal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Current Event in the Psst",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token_global={{siToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": {{evId}},\r\n    \"startAt\": \"{{startAtId}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}removePersonal",
+					"host": [
+						"{{baseUrl}}removePersonal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Personal Event Today",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var key = \"evId\"\r",
+							"var value = pm.response.json().data.payload.id //Вместо id можно использовать другое поле  json\r",
+							"pm.collectionVariables.set(key, value)\r",
+							"\r",
+							"var key = \"startAtId\"\r",
+							"var value = pm.response.json().data.startAt\r",
+							"pm.collectionVariables.set(key, value)"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm?.request?.body?.options?.raw?.language === 'json') {\r",
+							"    const rawData = pm.request.body.toString();\r",
+							"    const strippedData = rawData.replace(\r",
+							"        /\\\\\"|\"(?:\\\\\"|[^\"])*\"|(\\/\\/.*|\\/\\*[\\s\\S]*?\\*\\/)/g,\r",
+							"        (m, g) => g ? \"\" : m\r",
+							"    );\r",
+							"\r",
+							"    pm.request.body.update(JSON.stringify(JSON.parse(strippedData)));\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token_global={{siToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"startAt\": \"2022-07-01T01:00:00+00:00\",\r\n    \"endAt\": \"2022-07-01T01:30:00+00:00\",\r\n    \"backgroundColor\": \"{{red}}\",\r\n    \"color\": \"{{blue}}\",\r\n    \"description\": \"Курсовая-2\",\r\n    \"title\": \"Sergey_Iv.\"\r\n}\r\n// Создаём персональное событие сегодня. Изменил цвет события",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}createPersonal",
+					"host": [
+						"{{baseUrl}}createPersonal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Current Event",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token_global={{siToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": {{evId}},\r\n    \"startAt\": \"{{startAtId}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}removePersonal",
+					"host": [
+						"{{baseUrl}}removePersonal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleting a non-existing event",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token_global={{siToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": {{evId}},\r\n    \"startAt\": \"{{startAtId}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}removePersonal",
+					"host": [
+						"{{baseUrl}}removePersonal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create an event in the Future",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var key = \"evId\"\r",
+							"var value = pm.response.json().data.payload.id //Вместо id можно использовать другое поле  json\r",
+							"pm.collectionVariables.set(key, value)\r",
+							"\r",
+							"var key = \"startAtId\"\r",
+							"var value = pm.response.json().data.startAt\r",
+							"pm.collectionVariables.set(key, value)"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm?.request?.body?.options?.raw?.language === 'json') {\r",
+							"    const rawData = pm.request.body.toString();\r",
+							"    const strippedData = rawData.replace(\r",
+							"        /\\\\\"|\"(?:\\\\\"|[^\"])*\"|(\\/\\/.*|\\/\\*[\\s\\S]*?\\*\\/)/g,\r",
+							"        (m, g) => g ? \"\" : m\r",
+							"    );\r",
+							"\r",
+							"    pm.request.body.update(JSON.stringify(JSON.parse(strippedData)));\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token_global={{siToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"startAt\": \"2022-12-01T01:00:00+00:00\",\r\n    \"endAt\": \"2022-12-01T01:30:00+00:00\",\r\n    \"backgroundColor\": \"{{Aquamarine}}\",\r\n    \"color\": \"{{lime}}\",\r\n    \"description\": \"Курсовая-2\",\r\n    \"title\": \"Сергей_ИВ\"\r\n}\r\n//Создаём событие в будущем",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}createPersonal",
+					"host": [
+						"{{baseUrl}}createPersonal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update  Personal Event",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var key = \"startAt\"\r",
+							"var value = pm.response.json().data.startAt\r",
+							"pm.collectionVariables.set(key, value)\r",
+							"var key1 = \"ev2Id\"\r",
+							"var value1 = pm.response.json().data.payload.id //Вместо id можно использовать другое поле  json\r",
+							"pm.collectionVariables.set(key1, value1)"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token_global={{siToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"backgroundColor\": \"{{Aquamarine}}\",\r\n    \"color\": \"{{Black}}\",\r\n    \"description\": \"Курсовая-2333\",\r\n    \"title\": \"Иваныч\",\r\n    \"startAt\": \"2022-07-01T00:30:00+00:00\",\r\n    \"endAt\": \"2022-07-01T01:00:00+00:00\",\r\n    \"id\": {{evId}},\r\n    \"oldStartAt\": \"{{startAtId}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}updatePersonal",
+					"host": [
+						"{{baseUrl}}updatePersonal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Update Event",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token_global={{siToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": {{ev2Id}},\r\n    \"startAt\": \"{{startAt}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}removePersonal",
+					"host": [
+						"{{baseUrl}}removePersonal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Personal Event with over 40 charackters",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var key = \"evId\"\r",
+							"var value = pm.response.json().data.payload.id //Вместо id можно использовать другое поле  json\r",
+							"pm.collectionVariables.set(key, value)\r",
+							"\r",
+							"var key = \"startAtId\"\r",
+							"var value = pm.response.json().data.startAt\r",
+							"pm.collectionVariables.set(key, value)"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm?.request?.body?.options?.raw?.language === 'json') {\r",
+							"    const rawData = pm.request.body.toString();\r",
+							"    const strippedData = rawData.replace(\r",
+							"        /\\\\\"|\"(?:\\\\\"|[^\"])*\"|(\\/\\/.*|\\/\\*[\\s\\S]*?\\*\\/)/g,\r",
+							"        (m, g) => g ? \"\" : m\r",
+							"    );\r",
+							"\r",
+							"    pm.request.body.update(JSON.stringify(JSON.parse(strippedData)));\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token_global={{siToken}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"startAt\": \"2022-07-01T01:00:00+00:00\",\r\n    \"endAt\": \"2022-07-01T01:30:00+00:00\",\r\n    \"backgroundColor\": \"{{red}}\",\r\n    \"color\": \"{{blue}}\",\r\n    \"description\": \"Курсовая-2\",\r\n    \"title\": \"Прежде всего, сложившаяся структура орган\"\r\n}\r\n// Создаём событие c названием более 40 символов",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}createPersonal",
+					"host": [
+						"{{baseUrl}}createPersonal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create an event with invalid data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var key = \"evId\"\r",
+							"var value = pm.response.json().data.payload.id //Вместо id можно использовать другое поле  json\r",
+							"pm.collectionVariables.set(key, value)\r",
+							"\r",
+							"var key = \"startAtId\"\r",
+							"var value = pm.response.json().data.startAt\r",
+							"pm.collectionVariables.set(key, value)"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm?.request?.body?.options?.raw?.language === 'json') {\r",
+							"    const rawData = pm.request.body.toString();\r",
+							"    const strippedData = rawData.replace(\r",
+							"        /\\\\\"|\"(?:\\\\\"|[^\"])*\"|(\\/\\/.*|\\/\\*[\\s\\S]*?\\*\\/)/g,\r",
+							"        (m, g) => g ? \"\" : m\r",
+							"    );\r",
+							"\r",
+							"    pm.request.body.update(JSON.stringify(JSON.parse(strippedData)));\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token_global={{siToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"startAt\": \"2022-17-01T01:00:00+00:00\",\r\n    \"endAt\": \"2022-17-01T0:02:00+00:00\",\r\n    \"backgroundColor\": \"{{red}}\",\r\n    \"color\": \"{{blue}}\",\r\n    \"description\": \"Курсовая-2\",\r\n    \"title\": \"Сергей_ИВ\"\r\n}\r\n//Создаём событие в 17 месяце",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}createPersonal",
+					"host": [
+						"{{baseUrl}}createPersonal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create an event without a data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var key = \"evId\"\r",
+							"var value = pm.response.json().data.payload.id //Вместо id можно использовать другое поле  json\r",
+							"pm.collectionVariables.set(key, value)\r",
+							"\r",
+							"var key = \"startAtId\"\r",
+							"var value = pm.response.json().data.startAt\r",
+							"pm.collectionVariables.set(key, value)"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm?.request?.body?.options?.raw?.language === 'json') {\r",
+							"    const rawData = pm.request.body.toString();\r",
+							"    const strippedData = rawData.replace(\r",
+							"        /\\\\\"|\"(?:\\\\\"|[^\"])*\"|(\\/\\/.*|\\/\\*[\\s\\S]*?\\*\\/)/g,\r",
+							"        (m, g) => g ? \"\" : m\r",
+							"    );\r",
+							"\r",
+							"    pm.request.body.update(JSON.stringify(JSON.parse(strippedData)));\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token_global={{siToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"startAt\": \"\",\r\n    \"endAt\": \"\",\r\n    \"backgroundColor\": \"{{red}}\",\r\n    \"color\": \"{{blue}}\",\r\n    \"description\": \"Курсовая-2\",\r\n    \"title\": \"Сергей_ИВ\"\r\n}\r\n//Создаём событие без даты",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}createPersonal",
+					"host": [
+						"{{baseUrl}}createPersonal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create an event without a title",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var key = \"evId\"\r",
+							"var value = pm.response.json().data.payload.id //Вместо id можно использовать другое поле  json\r",
+							"pm.collectionVariables.set(key, value)\r",
+							"\r",
+							"var key = \"startAtId\"\r",
+							"var value = pm.response.json().data.startAt\r",
+							"pm.collectionVariables.set(key, value)"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm?.request?.body?.options?.raw?.language === 'json') {\r",
+							"    const rawData = pm.request.body.toString();\r",
+							"    const strippedData = rawData.replace(\r",
+							"        /\\\\\"|\"(?:\\\\\"|[^\"])*\"|(\\/\\/.*|\\/\\*[\\s\\S]*?\\*\\/)/g,\r",
+							"        (m, g) => g ? \"\" : m\r",
+							"    );\r",
+							"\r",
+							"    pm.request.body.update(JSON.stringify(JSON.parse(strippedData)));\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token_global={{siToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"startAt\": \"\",\r\n    \"endAt\": \"\",\r\n    \"backgroundColor\": \"{{red}}\",\r\n    \"color\": \"{{blue}}\",\r\n    \"description\": \"Курсовая-2\",\r\n    \"title\": \"Сергей_ИВ\"\r\n}\r\n//Создаём событие без заголовка",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}createPersonal",
+					"host": [
+						"{{baseUrl}}createPersonal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "leave description blank",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var key = \"evId\"\r",
+							"var value = pm.response.json().data.payload.id //Вместо id можно использовать другое поле  json\r",
+							"pm.collectionVariables.set(key, value)\r",
+							"\r",
+							"var key = \"startAtId\"\r",
+							"var value = pm.response.json().data.startAt\r",
+							"pm.collectionVariables.set(key, value)"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm?.request?.body?.options?.raw?.language === 'json') {\r",
+							"    const rawData = pm.request.body.toString();\r",
+							"    const strippedData = rawData.replace(\r",
+							"        /\\\\\"|\"(?:\\\\\"|[^\"])*\"|(\\/\\/.*|\\/\\*[\\s\\S]*?\\*\\/)/g,\r",
+							"        (m, g) => g ? \"\" : m\r",
+							"    );\r",
+							"\r",
+							"    pm.request.body.update(JSON.stringify(JSON.parse(strippedData)));\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token_global={{siToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"startAt\": \"2022-07-01T01:00:00+00:00\",\r\n    \"endAt\": \"2022-07-01T01:30:00+00:00\",\r\n    \"backgroundColor\": \"{{red}}\",\r\n    \"color\": \"{{blue}}\",\r\n    \"description\": \"\",\r\n    \"title\": \"Сергей_ИВ\"\r\n}\r\n//Создаём событие без описания",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}createPersonal",
+					"host": [
+						"{{baseUrl}}createPersonal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Current Event",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Cookie",
+						"value": "token_global={{siToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": {{evId}},\r\n    \"startAt\": \"{{startAtId}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}removePersonal",
+					"host": [
+						"{{baseUrl}}removePersonal"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "siToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "baseUrl",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "startAt",
+			"value": ""
+		},
+		{
+			"key": "startAtId",
+			"value": ""
+		},
+		{
+			"key": "evId",
+			"value": ""
+		},
+		{
+			"key": "ev2Id",
+			"value": ""
+		},
+		{
+			"key": "yello",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "red",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "lime",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "blue",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "Aquamarine",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "White",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "Black",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
